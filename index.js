@@ -1,13 +1,27 @@
 const express = require("express");
 const { google } = require("googleapis");
 
+const path = require('path')
+const publicDirectory = path.join(__dirname, '/public')
+const viewPath = path.join(__dirname, '/views')
 const app = express();
-app.set("view engine", "ejs");
+
+app.set("view engine", "hbs");
+app.set('views', viewPath)
+
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static(publicDirectory));
 
 app.get("/", (req, res) => {
-  res.render("index");
+  res.render("index", {
+    title: "Google Calendar API",
+    name: "Mujtaba"
+  });
 });
+
+app.get("/about", (req, res) => {
+  res.render("about");
+})
 
 app.post("/", async (req, res) => {
   const { request, name } = req.body;
@@ -53,4 +67,4 @@ app.post("/", async (req, res) => {
   // res.send("Successfully submitted! Thank you!");
 });
 
-app.listen(1337, (req, res) => console.log("running on 1337"));
+app.listen(3000, (req, res) => console.log("running on 1337"));
